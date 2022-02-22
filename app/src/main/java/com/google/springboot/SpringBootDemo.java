@@ -28,7 +28,7 @@ public class SpringBootDemo {
 
   @RequestMapping("/version")
   public String home() {
-    LOGGER.info("Serving request from version 2");
+    LOGGER.info("Serving request from v2 green stack");
     return "{\"id\":2,\"content\":\"green\"}";
   }
 

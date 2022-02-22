@@ -28,8 +28,8 @@ public class SpringBootDemo {
 
   @RequestMapping("/version")
   public String home() {
-    LOGGER.info("Serving request from version 1");
-    return "{\"id\":1,\"content\":\"current\"}";
+    LOGGER.info("Serving request from version 2");
+    return "{\"id\":2,\"content\":\"green\"}";
   }
 
   public static void main(String[] args) {

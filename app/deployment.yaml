@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: gcr.io/cloud-solutions-images/app:current
+          image: us-east1-docker.pkg.dev/elite-vault-341617/gke-demo-artifacts/app:v1
           livenessProbe:
              httpGet:
                 path: /version

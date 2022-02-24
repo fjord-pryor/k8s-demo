@@ -3,14 +3,22 @@ kind: Deployment
 metadata:
   name: app-01
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: demo-app-v1
+
   template:
     metadata:
        labels:
          app: demo-app-v1
     spec:
+      initContainers:
+        - name: app-sysctl
+          image: us-east1-docker.pkg.dev/elite-vault-341617/gke-demo-artifacts/app:v1
+          securityContext:
+            privileged: true
+          command: ["/bin/sh", "-c", "sysctl -w net.ipv4.tcp_congestion_control=bbr"]
       containers:
         - name: app
           image: us-east1-docker.pkg.dev/elite-vault-341617/gke-demo-artifacts/app:v1
@@ -28,3 +36,15 @@ spec:
                    command: ["/bin/bash", "-c", "sleep 5"]
           ports:
             - containerPort: 8080
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - demo-app-v1
+              topologyKey: topology.kubernetes.io/zone

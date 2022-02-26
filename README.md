@@ -1,4 +1,4 @@
-# chess-k8s-demo
+# k8s-demo
 
 # initial thoughts - 12 PM
 This doesn't look hard. Seems like they want me to show I know:

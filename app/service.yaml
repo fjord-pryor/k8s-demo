@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: app
+  name: sally
 spec:
+  type: ClusterIP
   selector:
-    app: demo-app-v2
+    run: demo-app-v1 # update to demo-app-v2 for blue-green deployment
   ports:
-    - port: 8080
-      targetPort: 8080
-  type: LoadBalancer
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080

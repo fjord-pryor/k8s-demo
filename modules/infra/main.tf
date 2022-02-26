@@ -20,8 +20,17 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_subnetwork" "subnet" {
   name          = "${var.project_id}-subnet"
   region        = var.region
-  network       = google_compute_network.vpc.name
+  network       = google_compute_network.vpc.id
   ip_cidr_range = "10.10.0.0/24"
+}
+
+resource "google_compute_network_endpoint_group" "neg" {
+  for_each      = toset( ["a", "b", "c"] )
+  name         = "zone-${each.key}-lb-neg"
+  network      = google_compute_network.vpc.id
+  subnetwork   = google_compute_subnetwork.subnet.id
+  default_port = "80"
+  zone         = "us-east4-${each.key}"
 }
 
 # spin up cluster inside
@@ -49,6 +58,7 @@ resource "google_container_node_pool" "pools" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
       "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/cloud-platform"
     ]
     labels = {
       env     = var.project_id,
